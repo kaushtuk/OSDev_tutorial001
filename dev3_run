@@ -1,0 +1,18 @@
+rm -rf myos.iso
+i686-elf-as ./src/boot.s -o boot.o
+i686-elf-gcc -c ./src/kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -T ./src/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
+
+rm -rf boot.o kernel.o
+
+grub-file --is-x86-multiboot myos.bin
+echo $?
+
+mkdir -p isodir/boot/grub
+mv myos.bin isodir/boot/myos.bin
+cp ./src/grub.cfg isodir/boot/grub/grub.cfg
+tree isodir
+
+grub-mkrescue -o myos.iso isodir
+rm -rf isodir
+
