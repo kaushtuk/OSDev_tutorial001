@@ -2,6 +2,7 @@ source_path = ./src
 build_path = ./build
 isodir = ./isodir
 
+all: clean iso
 iso: iso_dir
 	grub-mkrescue -o $(build_path)/MyOS.iso $(isodir)
 	rm -rf $(isodir)
